@@ -6,4 +6,5 @@ gemspec
 
 group :development, optional: true do
   gem "dc-devtools"
+  gem "rdoc"
 end

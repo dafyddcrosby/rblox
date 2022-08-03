@@ -1,108 +1,12 @@
 #!/usr/bin/ruby
+# frozen_string_literal: true
 
-require "strscan"
+require "rblox"
 
-class RbLox
-  def initialize
-    @had_error = false
-  end
-
-  def self.read_source_file(file)
-    # TODO: error handling
-    f_contents = ::File.read(file)
-    p f_contents
-  end
-
-  def run_prompt
-    loop do
-      # TODO: how to chomp newline?
-      puts "> "
-      line = gets
-      next if line.strip == ""
-
-      run(line)
-      @had_error = false
-    end
-  end
-
-  def run(line)
-    tokens = Scanner.new(line)
-    tokens.scantokens.each do |t|
-      puts t
-    end
-  end
-
-  def error(line, msg)
-    report(line, "", msg)
-  end
-
-  module Tokens
-    i = 1
-    lookup = {}
-    %w[ LEFT_PAREN RIGHT_PAREN LEFT_BRACE RIGHT_BRACE COMMA DOT MINUS
-        PLUS SEMICOLON SLASH STAR BANG BANG_EQUAL EQUAL EQUAL_EQUAL
-        GREATER GREATER_EQUAL LESS LESS_EQUAL IDENTIFIER STRING NUMBER
-        AND CLASS ELSE FALSE FUN FOR IF NIL OR PRINT RETURN SUPER
-        THIS TRUE VAR WHILE ].each do |token|
-      val = 1 << i
-      const_set(token, val)
-      lookup[val] = token.to_sym
-      i += 1
-    end
-    Lookup = lookup
-  end
-
-  class Token
-    def initialize(type, lexeme = "", literal = "", line = nil)
-      @type = type
-      @lexeme = lexeme
-      @literal = literal
-      @line = line
-    end
-
-    def to_s
-      "#{type} #{lexeme} #{literal}".strip
-    end
-  end
-
-  class Scanner
-    def initialize(source)
-      @source = source
-      @tokens = []
-    end
-
-    def scantokens
-      s = ::StringScanner.new(@source)
-      until s.eos?
-        lexeme = s.scan(/\w+/)
-        @tokens.append scan_token(lexeme)
-
-        # Move scanner pointer forward
-        s.scan(/\s+/)
-      end
-      puts "returning tok"
-      @tokens
-    end
-
-    def scan_token(lexeme)
-      case lexeme
-      when "{"
-        Tokens.new(Tokens::LEFT_BRACE)
-      when "}"
-        Tokens.new(Tokens::RIGHT_BRACE)
-      end
-    end
-  end
-
-  private
-
-  def report(line, where, msg)
-    puts "[line #{line}] Error #{where}: #{msg}"
-  end
-end
+# TODO: use optparse
 
 abort("usage blah") if ARGV.size > 1
-l = RbLox.new
+l = RbLox::Interpreter.new
 if ARGV.size == 1
   l.read_source_file(ARGV[0])
 else

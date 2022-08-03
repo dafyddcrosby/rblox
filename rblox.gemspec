@@ -5,7 +5,7 @@ require_relative "lib/rblox/version"
 Gem::Specification.new do |spec|
   spec.name = "rblox"
   spec.required_ruby_version = ">= 2.6.0"
-  spec.version     = Rblox::VERSION
+  spec.version     = RbLox::VERSION
   spec.platform    = Gem::Platform::RUBY
   spec.authors     = ["David Crosby"]
   spec.homepage    = "https://daveops.net"
