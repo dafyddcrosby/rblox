@@ -17,6 +17,26 @@ module RbLox
       i += 1
     end
     LOOKUP = lookup
+
+    # TODO: Could generate this from array and be clever ;-)
+    KEYWORD_MAP = {
+      "and" => RbLox::Tokens::AND,
+      "class" => RbLox::Tokens::CLASS,
+      "else" => RbLox::Tokens::ELSE,
+      "false" => RbLox::Tokens::FALSE,
+      "for" => RbLox::Tokens::FOR,
+      "fun" => RbLox::Tokens::FUN,
+      "if" => RbLox::Tokens::IF,
+      "nil" => RbLox::Tokens::NIL,
+      "or" => RbLox::Tokens::OR,
+      "print" => RbLox::Tokens::PRINT,
+      "return" => RbLox::Tokens::RETURN,
+      "super" => RbLox::Tokens::SUPER,
+      "this" => RbLox::Tokens::THIS,
+      "true" => RbLox::Tokens::TRUE,
+      "var" => RbLox::Tokens::VAR,
+      "while" => RbLox::Tokens::WHILE,
+    }.freeze
   end
 
   class Token
@@ -44,12 +64,13 @@ module RbLox
       @tokens = []
       @has_errors = false
       @scanner = nil
+      @line = 1
     end
 
     def scantokens
       @scanner = ::StringScanner.new(@source)
       until @scanner.eos?
-        t = case @scanner.getch
+        t = case (c = @scanner.getch)
             when "("
               Token.new(LEFT_PAREN)
             when ")"
@@ -72,20 +93,97 @@ module RbLox
               Token.new(STAR)
             when "!"
               Token.new(match("=") ? BANG_EQUAL : BANG)
+            when "="
+              Token.new(match("=") ? EQUAL_EQUAL : EQUAL)
+            when "<"
+              Token.new(match("=") ? LESS_EQUAL : LESS)
+            when ">"
+              Token.new(match("=") ? GREATER_EQUAL : GREATER)
+            when "\""
+              string
+            when "/"
+              if match("/")
+                @scanner.skip_until(/\n/)
+                next
+              else
+                Token.new(SLASH)
+              end
+            when "\r", "\t", " "
+              next
             when "\n"
+              @line += 1
               next
             else
-              # raise UnexpectedCharacter
-              @has_errors = true
-              next
+              if digit?(c)
+                number(c)
+              elsif alpha?(c)
+                identifier(c)
+              else
+                # raise UnexpectedCharacter
+                @has_errors = true
+                next
+              end
             end
         @tokens.append t
-        # binding.irb
 
         # Move scanner pointer forward on
         @scanner.scan(/\s*/)
       end
-      @tokens
+      @tokens.compact # compact to deal with nil returns (should check has_errors)
+    end
+
+    def digit?(char)
+      char >= "0" && char <= "9"
+    end
+
+    def alpha?(char)
+      (char >= "a" && char <= "z") ||
+        (char >= "A" && char <= "Z") ||
+        char == "_"
+    end
+
+    def alphanumeric?(char)
+      alpha?(char) || digit?(char)
+    end
+
+    def identifier(char)
+      # TODO: pull substring from scanner (save an allocate)
+      string = char
+      string << @scanner.getch while alphanumeric? @scanner.peek(1)
+
+      type = KEYWORD_MAP[string]
+      type ||= IDENTIFIER
+      Token.new(type)
+    end
+
+    def number(char)
+      # TODO: pull substring from scanner (save an allocate)
+      string = char
+      string << @scanner.getch while digit?(@scanner.peek(1))
+
+      if @scanner.peek(1) == "." && digit?(@scanner.peek(2)[1])
+        string << @scanner.getch
+        string << @scanner.getch while digit?(@scanner.peek(1))
+      end
+      Token.new(NUMBER, string.to_f)
+    end
+
+    def string
+      # TODO: pull substring from scanner (save an allocate)
+      string = String.new
+      while (@scanner.peek(1) != '"') && !@scanner.eos?
+        string << @scanner.getch
+        @lines += 1 if @scanner.peek(1) == "\n"
+      end
+
+      if @scanner.eos?
+        puts "unterminated line"
+        return
+      end
+
+      # get trailing "
+      @scanner.getch
+      Token.new(STRING, string)
     end
 
     def match(expected)
