@@ -6,7 +6,6 @@ guard :rake, task: "default" do
   watch("Gemfile")
   watch("Rakefile")
   watch("Guardfile")
-  watch(%r{^test/helper\.rb$})
   watch(%r{^test/test_(.*)\.rb$})
   watch(%r{^lib/rblox/(.*)\.rb$})
   watch(%r{^lib/(.*)\.rb$})
