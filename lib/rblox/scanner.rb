@@ -10,7 +10,7 @@ module RbLox
         PLUS SEMICOLON SLASH STAR BANG BANG_EQUAL EQUAL EQUAL_EQUAL
         GREATER GREATER_EQUAL LESS LESS_EQUAL IDENTIFIER STRING NUMBER
         AND CLASS ELSE FALSE FUN FOR IF NIL OR PRINT RETURN SUPER
-        THIS TRUE VAR WHILE ].each do |token|
+        THIS TRUE VAR WHILE EOF ].each do |token|
       val = 1 << i
       const_set(token, val)
       lookup[val] = token.to_sym
@@ -131,6 +131,7 @@ module RbLox
         # Move scanner pointer forward on
         @scanner.scan(/\s*/)
       end
+      @tokens.append(Token.new(EOF))
       @tokens.compact # compact to deal with nil returns (should check has_errors)
     end
 

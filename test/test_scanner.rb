@@ -54,7 +54,7 @@ class TestScanner < Minitest::Test
       ["var\n", [:VAR]],
       ["while\n", [:WHILE]],
     ].each do |input, output|
-      assert_equal output,
+      assert_equal output.append(:EOF),
                    RbLox::Scanner.new(input).scantokens.map(&:type),
                    [input, output]
     end
