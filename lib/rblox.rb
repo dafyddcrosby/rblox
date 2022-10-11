@@ -2,6 +2,7 @@
 
 require "rblox/version"
 require "rblox/scanner"
+require "rblox/grammar"
 
 module RbLox
   class Interpreter

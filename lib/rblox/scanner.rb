@@ -39,8 +39,10 @@ module RbLox
     }.freeze
   end
 
-  class Token
+  class Token < BasicObject
     include Tokens
+    attr_accessor :lexeme
+
     def initialize(type, lexeme = "", literal = "", line = nil)
       @type = type
       @lexeme = lexeme
@@ -177,7 +179,7 @@ module RbLox
       end
 
       if @scanner.eos?
-        puts "unterminated line"
+        # puts "unterminated line"
         return
       end
 
