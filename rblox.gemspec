@@ -15,10 +15,6 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["rubygems_mfa_required"] = "true"
 
-  spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    `git ls-files -z`.split("\x0").reject do |f|
-      (f == __FILE__) || f.match(%r{\A(?:(?:bin|test)/|\.(?:git))})
-    end
-  end
+  spec.files = File.read("Manifest.txt").split
   spec.bindir = "exe"
 end
