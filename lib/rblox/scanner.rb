@@ -136,12 +136,12 @@ module RbLox
     end
 
     def digit?(char)
-      char >= "0" && char <= "9"
+      char.between?("0", "9")
     end
 
     def alpha?(char)
-      (char >= "a" && char <= "z") ||
-        (char >= "A" && char <= "Z") ||
+      char.between?("a", "z") ||
+        char.between?("A", "Z") ||
         char == "_"
     end
 
