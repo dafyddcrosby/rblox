@@ -1,0 +1,17 @@
+# Generated from lib/rblox.rb with RBS::Inline
+
+module RbLox
+  class Interpreter
+    def initialize: () -> untyped
+
+    def read_source_file: (untyped file) -> untyped
+
+    def run_prompt: () -> untyped
+
+    def run: (untyped line) -> untyped
+
+    def error: (untyped line, untyped msg) -> untyped
+
+    def report: (untyped line, untyped where, untyped msg) -> untyped
+  end
+end

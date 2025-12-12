@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rbs_inline: enabled
+
 # See tool/GenerateAst.java
 
 module RbLox

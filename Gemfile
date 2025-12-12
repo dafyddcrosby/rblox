@@ -6,6 +6,6 @@ gemspec
 
 group :development, optional: true do
   gem "dc-devtools", "~> 0.5"
-  gem "rdoc"
   gem("dc-typing", "~> 0.1.1") unless RUBY_VERSION.match?("3.[0-2]")
+  gem "rdoc"
 end

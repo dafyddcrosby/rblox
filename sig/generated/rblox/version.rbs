@@ -1,0 +1,5 @@
+# Generated from lib/rblox/version.rb with RBS::Inline
+
+module RbLox
+  VERSION: String
+end

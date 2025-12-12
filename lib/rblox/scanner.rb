@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+# rbs_inline: enabled
+
 require "strscan"
 
+# @rbs module-self BasicObject
 module RbLox
   module Tokens
     i = 0
@@ -39,7 +42,7 @@ module RbLox
     }.freeze
   end
 
-  class Token < BasicObject
+  class Token
     include Tokens
     attr_accessor :lexeme
 
@@ -50,7 +53,7 @@ module RbLox
       @line = line
     end
 
-    def to_s
+    def to_s #: String
       "#{@type} #{@lexeme} #{@literal}".strip
     end
 
@@ -94,17 +97,17 @@ module RbLox
             when "*"
               Token.new(STAR)
             when "!"
-              Token.new(match("=") ? BANG_EQUAL : BANG)
+              Token.new(match("=") ? BANG_EQUAL : BANG) # rubocop:todo Performance/RegexpMatch
             when "="
-              Token.new(match("=") ? EQUAL_EQUAL : EQUAL)
+              Token.new(match("=") ? EQUAL_EQUAL : EQUAL) # rubocop:todo Performance/RegexpMatch
             when "<"
-              Token.new(match("=") ? LESS_EQUAL : LESS)
+              Token.new(match("=") ? LESS_EQUAL : LESS) # rubocop:todo Performance/RegexpMatch
             when ">"
-              Token.new(match("=") ? GREATER_EQUAL : GREATER)
+              Token.new(match("=") ? GREATER_EQUAL : GREATER) # rubocop:todo Performance/RegexpMatch
             when "\""
               string
             when "/"
-              if match("/")
+              if match("/") # rubocop:todo Performance/RegexpMatch
                 @scanner.skip_until(/\n/)
                 next
               else
@@ -135,17 +138,17 @@ module RbLox
       @tokens.compact # compact to deal with nil returns (should check has_errors)
     end
 
-    def digit?(char)
+    def digit?(char) #: bool
       char.between?("0", "9")
     end
 
-    def alpha?(char)
+    def alpha?(char) #: bool
       char.between?("a", "z") ||
         char.between?("A", "Z") ||
         char == "_"
     end
 
-    def alphanumeric?(char)
+    def alphanumeric?(char) #: bool
       alpha?(char) || digit?(char)
     end
 
@@ -189,7 +192,7 @@ module RbLox
       Token.new(STRING, string)
     end
 
-    def match(expected)
+    def match(expected) #: bool
       return false if @scanner.eos?
       return false if @scanner.peek(1) != expected
 

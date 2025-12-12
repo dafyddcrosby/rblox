@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rbs_inline: enabled
+
 require "rblox/version"
 require "rblox/scanner"
 require "rblox/grammar"
@@ -10,6 +12,7 @@ module RbLox
       @had_error = false
     end
 
+    #: (String) -> untyped
     def read_source_file(file)
       # TODO: error handling
       f_contents = ::File.read(file)
@@ -20,7 +23,7 @@ module RbLox
       loop do
         # TODO: how to chomp newline?
         puts "> "
-        line = gets
+        line = gets || ""
         next if line.strip == ""
 
         run(line)

@@ -1,0 +1,45 @@
+# Generated from lib/rblox/scanner.rb with RBS::Inline
+
+# @rbs module-self BasicObject
+module RbLox : BasicObject
+  module Tokens
+    LOOKUP: untyped
+
+    # TODO: Could generate this from array and be clever ;-)
+    KEYWORD_MAP: untyped
+  end
+
+  class Token
+    include Tokens
+
+    attr_accessor lexeme: untyped
+
+    def initialize: (untyped type, ?untyped lexeme, ?untyped literal, ?untyped line) -> untyped
+
+    def to_s: () -> String
+
+    def type: () -> untyped
+  end
+
+  class Scanner
+    include Tokens
+
+    def initialize: (untyped source) -> untyped
+
+    def scantokens: () -> untyped
+
+    def digit?: (untyped char) -> bool
+
+    def alpha?: (untyped char) -> bool
+
+    def alphanumeric?: (untyped char) -> bool
+
+    def identifier: (untyped char) -> untyped
+
+    def number: (untyped char) -> untyped
+
+    def string: () -> untyped
+
+    def match: (untyped expected) -> bool
+  end
+end

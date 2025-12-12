@@ -1,0 +1,18 @@
+# Generated from lib/rblox/grammar.rb with RBS::Inline
+
+module RbLox
+  class Expr
+  end
+
+  class AstPrinter
+    def print: (untyped expr) -> untyped
+
+    def parenthesize: (untyped name, *untyped exprs) -> untyped
+
+    def visit_literal_expr: (untyped expr) -> untyped
+
+    def visit_unary_expr: (untyped expr) -> untyped
+
+    def visit_binary_expr: (untyped expr) -> untyped
+  end
+end
