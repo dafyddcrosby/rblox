@@ -44,6 +44,7 @@ module RbLox
 
   class Token
     include Tokens
+
     attr_accessor :lexeme
 
     def initialize(type, lexeme = "", literal = "", line = nil)
@@ -64,6 +65,7 @@ module RbLox
 
   class Scanner
     include Tokens
+
     def initialize(source)
       @source = source
       @tokens = []
@@ -97,17 +99,17 @@ module RbLox
             when "*"
               Token.new(STAR)
             when "!"
-              Token.new(match("=") ? BANG_EQUAL : BANG) # rubocop:todo Performance/RegexpMatch
+              Token.new(match?("=") ? BANG_EQUAL : BANG)
             when "="
-              Token.new(match("=") ? EQUAL_EQUAL : EQUAL) # rubocop:todo Performance/RegexpMatch
+              Token.new(match?("=") ? EQUAL_EQUAL : EQUAL)
             when "<"
-              Token.new(match("=") ? LESS_EQUAL : LESS) # rubocop:todo Performance/RegexpMatch
+              Token.new(match?("=") ? LESS_EQUAL : LESS)
             when ">"
-              Token.new(match("=") ? GREATER_EQUAL : GREATER) # rubocop:todo Performance/RegexpMatch
+              Token.new(match?("=") ? GREATER_EQUAL : GREATER)
             when "\""
               string
             when "/"
-              if match("/") # rubocop:todo Performance/RegexpMatch
+              if match?("/")
                 @scanner.skip_until(/\n/)
                 next
               else
@@ -192,7 +194,7 @@ module RbLox
       Token.new(STRING, string)
     end
 
-    def match(expected) #: bool
+    def match?(expected) #: bool
       return false if @scanner.eos?
       return false if @scanner.peek(1) != expected
 
