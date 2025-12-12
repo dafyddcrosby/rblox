@@ -10,4 +10,10 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList["test/test_*.rb"]
 end
 
-task default: %i[test rubocop]
+default_tasks = %i[test rubocop]
+unless RUBY_VERSION.match?("3.[0-2]")
+  require "dc_typing/rake"
+  default_tasks.append("steep")
+end
+
+task default: default_tasks
